@@ -56,6 +56,7 @@ namespace Library
 
             //    db.Books.AddRange(book1, book2, book3, book4, book5);
             //    db.Customers.AddRange(customer1, customer2, customer3);
+
                
                 //db.SaveChanges();
                 

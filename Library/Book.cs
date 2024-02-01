@@ -11,7 +11,7 @@ namespace Library
         public int Id { get; set; }
         public string Name { get; set; }
         public string AuthorName { get; set; }
-        public Customer CustomerObj { get; set; }
-        
+        public List<Customer> Customers { get; set; } = new List<Customer>();
+
     }
 }

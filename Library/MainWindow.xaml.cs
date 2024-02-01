@@ -21,12 +21,14 @@ namespace Library
         public MainWindow()
         {
             InitializeComponent();
-            FillDb();
+            //FillDb();
             using (AppContext db = new AppContext())
             {
                 var customers = db.Customers.ToList();
-               foreach (var customer in customers) { 
-                CustomersComboBox.Items.Add(customer.Name) ;
+                foreach (var customer in customers)
+                {
+                    CustomersListBox.Items.Add(customer.Name);
+                    CustomersComboBox.Items.Add(customer.Name);
                 }
 
                 var books = db.Books.ToList();
@@ -35,31 +37,33 @@ namespace Library
                     BooksComboBox.Items.Add(book.Name);
                 }
             }
+            CustomersListBox.SelectionChanged += CustomerSelection;
+
         }
 
-       private void FillDb()
+        private void FillDb()
         {
             using (AppContext db = new AppContext())
             {
-            //    Customer customer1 = new Customer() { Name = "Afruz", Surname = "Quliyeva", Age = 21 };
-            //    Customer customer2 = new Customer() { Name = "Farid", Surname = "Salayev", Age = 19 };
-            //    Customer customer3 = new Customer() { Name = "Alina", Surname = "Mirzoyeva", Age = 17 };
-            //    Customer customer4 = new Customer() { Name = "Rustam", Surname = "Veliyev", Age = 24 };
+                Customer customer1 = new Customer() { Name = "Afruz", Surname = "Quliyeva", Age = 21 };
+                Customer customer2 = new Customer() { Name = "Farid", Surname = "Salayev", Age = 19 };
+                Customer customer3 = new Customer() { Name = "Alina", Surname = "Mirzoyeva", Age = 17 };
+                Customer customer4 = new Customer() { Name = "Rustam", Surname = "Veliyev", Age = 24 };
 
 
-            //    Book book1 = new Book() { Name = "Portraint of Dorian Gray", AuthorName = "Oscar Wilde", CustomerObj = customer1 };
-            //    Book book2 = new Book() { Name = "Theatre", AuthorName = "Somerset Maugham", CustomerObj = customer3 };
-            //    Book book3 = new Book() { Name = "Death on the Nile", AuthorName = "Agata Chistie", CustomerObj = customer2 };
-            //    Book book4 = new Book() { Name = "The night in Lisbon", AuthorName = "Erich Maria Remarque", CustomerObj = customer4 };
-            //    Book book5 = new Book() { Name = "A walk to remember", AuthorName = "Nicholas Sparks", CustomerObj = customer4 };
+                Book book1 = new Book() { Name = "Portraint of Dorian Gray", AuthorName = "Oscar Wilde" };
+                Book book2 = new Book() { Name = "Theatre", AuthorName = "Somerset Maugham" };
+                Book book3 = new Book() { Name = "Death on the Nile", AuthorName = "Agata Chistie" };
+                Book book4 = new Book() { Name = "The night in Lisbon", AuthorName = "Erich Maria Remarque" };
+                Book book5 = new Book() { Name = "A walk to remember", AuthorName = "Nicholas Sparks" };
 
 
-            //    db.Books.AddRange(book1, book2, book3, book4, book5);
-            //    db.Customers.AddRange(customer1, customer2, customer3);
+                db.Books.AddRange(book1, book2, book3, book4, book5);
+                db.Customers.AddRange(customer1, customer2, customer3);
 
-               
-                //db.SaveChanges();
-                
+
+                db.SaveChanges();
+
             }
         }
 
@@ -67,7 +71,69 @@ namespace Library
         {
             using (AppContext db = new AppContext())
             {
-                db.Customers.Find(CustomersComboBox.SelectedIndex).Books.Add(db.Books.Find(BooksComboBox.SelectedIndex));
+                if (BooksComboBox.SelectedIndex == -1 || CustomersComboBox.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Choose both the customer and the book!");
+                }
+                else
+                {
+                    db.Books?.Find(BooksComboBox.SelectedIndex+1).Customers.Add(db.Customers?.Find(CustomersComboBox.SelectedIndex + 1));
+                    db.Customers?.Find(CustomersComboBox.SelectedIndex+1).Books.Add(db.Books?.Find(BooksComboBox.SelectedIndex + 1));
+                    db.SaveChanges();
+
+
+                    MessageBox.Show("Book was added to customer's list");
+                }
+            }
+        }
+
+
+        private void CustomerSelection(object sender, SelectionChangedEventArgs e)
+        {
+            using (AppContext db = new AppContext())
+            {
+                BooksListBox.Items.Clear();
+                Customer ind = db.Customers.Find(CustomersListBox.SelectedIndex+1);
+                var books = db.Books.Where(b => b.Customers.Contains(ind)).ToList();
+                foreach (var book in books)
+                {
+                    BooksListBox.Items.Add(book.Name);
+                }
+            }
+
+        }
+        private void UpdateBooksListBox()
+        {
+            using (AppContext db = new AppContext())
+            {
+                BooksListBox.Items.Clear();
+                Customer ind = db.Customers.Find(CustomersListBox.SelectedIndex + 1);
+                var books = db.Books.Where(b => b.Customers.Contains(ind)).ToList();
+                foreach (var book in books)
+                {
+                    BooksListBox.Items.Add(book.Name);
+                }
+            }
+
+        }
+        private void ReturnBookButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (AppContext db = new AppContext())
+            {
+                if (BooksListBox.SelectedIndex == -1 || CustomersListBox.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Choose both the customer and the book!");
+                }
+                else
+                {
+                    db.Books?.Find(BooksListBox.SelectedIndex+1).Customers.Remove(db.Customers?.Find(CustomersListBox.SelectedIndex+1));
+                    db.Customers?.Find(CustomersListBox.SelectedIndex + 1).Books.Remove(db.Books?.Find(BooksListBox.SelectedIndex + 1));
+                    db.SaveChanges();
+
+
+                    MessageBox.Show("Book was returned");
+                    UpdateBooksListBox();
+                }
 
             }
         }

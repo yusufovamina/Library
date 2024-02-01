@@ -5,18 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Library"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="400">
+    <Grid HorizontalAlignment="Left" Width="400">
         <Grid.Background>
             <RadialGradientBrush>
                 <GradientStop Color="#FFF9B48B" Offset="1"/>
                 <GradientStop Color="#FFF9DECE" Offset="0"/>
             </RadialGradientBrush>
         </Grid.Background>
-        <Label Content="Library System" HorizontalAlignment="Left" Height="40" Margin="290,10,0,0" VerticalAlignment="Top" Width="183" FontWeight="Bold" FontFamily="Baskerville Old Face" FontSize="28"/>
+        <Label Content="Library System" HorizontalAlignment="Left" Height="40" Margin="105,10,0,0" VerticalAlignment="Top" Width="183" FontWeight="Bold" FontFamily="Baskerville Old Face" FontSize="28"/>
         <ComboBox Name="CustomersComboBox" HorizontalAlignment="Left" Height="28" Margin="29,71,0,0" VerticalAlignment="Top" Width="133"/>
         <ComboBox Name="BooksComboBox" HorizontalAlignment="Left" Height="28" Margin="222,71,0,0" VerticalAlignment="Top" Width="141"/>
         <Button Content="Take book" Click="TakeBookButton_Click" HorizontalAlignment="Left" Height="31" Margin="134,124,0,0" VerticalAlignment="Top" Width="89" Background="#FFE08787"/>
+        <ListBox Name="CustomersListBox" HorizontalAlignment="Left" Height="158" Margin="29,197,0,0" VerticalAlignment="Top" Width="133"  />
+        <ListBox Name="BooksListBox" HorizontalAlignment="Left" Height="158" Margin="230,197,0,0" VerticalAlignment="Top" Width="133" />
+        <Button Name="ReturnBook" Click="ReturnBookButton_Click" Content="Return book" HorizontalAlignment="Left" Height="41" Margin="139,368,0,0" VerticalAlignment="Top" Width="93" Background="#FFE2FA7D"/>
 
     </Grid>
 </Window>

@@ -20,8 +20,8 @@ namespace Library
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source = STHQ012E-09; Database=LibraryProject; TrustServerCertificate=true; Integrated Security = false; User Id = admin; Password = admin;");
-
+            optionsBuilder.UseSqlServer(@"Data Source = DESKTOP-0LP9EBH; Initial Catalog = LibraryProject; TrustServerCertificate=true; Integrated Security = true;");
+            //  "Data Source = STHQ012E-09; Database=LibraryProject; TrustServerCertificate=true; Integrated Security = false; User Id = admin; Password = admin;"
         }
     }
 }

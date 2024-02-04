@@ -120,20 +120,40 @@ namespace Library
         {
             using (AppContext db = new AppContext())
             {
-                if (BooksListBox.SelectedIndex == -1 || CustomersListBox.SelectedIndex == -1)
+                int selectedBookIndex = BooksListBox.SelectedIndex;
+                int selectedCustomerIndex = CustomersListBox.SelectedIndex;
+
+                if (selectedBookIndex >= 0 && selectedCustomerIndex >= 0)
                 {
-                    MessageBox.Show("Choose both the customer and the book!");
+                    var bookToRemove = db.Books?.Find(selectedBookIndex + 1);
+                    var customerToRemoveBookFrom = db.Customers?.Find(selectedCustomerIndex + 1);
+
+                    if (bookToRemove != null && customerToRemoveBookFrom != null)
+                    {
+                        customerToRemoveBookFrom.Books.Remove(bookToRemove);
+                        bookToRemove.Customers.Remove(customerToRemoveBookFrom);
+
+                        db.SaveChanges();
+                      
+                        BooksListBox.Items.Clear();
+                        foreach (var book in customerToRemoveBookFrom.Books.ToList())
+                        {
+                            BooksListBox.Items.Add(book);
+
+                        }
+                      
+                        MessageBox.Show("Book was returned");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid book or customer index");
+                    }
                 }
                 else
                 {
-                    db.Books?.Find(BooksListBox.SelectedIndex+1).Customers.Remove(db.Customers?.Find(CustomersListBox.SelectedIndex+1));
-                    db.Customers?.Find(CustomersListBox.SelectedIndex + 1).Books.Remove(db.Books?.Find(BooksListBox.SelectedIndex + 1));
-                    db.SaveChanges();
-
-
-                    MessageBox.Show("Book was returned");
-                    UpdateBooksListBox();
+                    MessageBox.Show("No book or customer selected");
                 }
+
 
             }
         }
